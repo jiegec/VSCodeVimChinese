@@ -1,10 +1,14 @@
 import * as _ from 'lodash';
 import * as vscode from 'vscode';
+import { Segment } from 'node-segment';
 
 import { VimState } from '../../state/vimState';
 import { configuration } from './../../configuration/configuration';
 import { VisualBlockMode } from './../../mode/modes';
 import { TextEditor } from './../../textEditor';
+
+const segment = new Segment();
+segment.useDefault();
 
 /**
  * Represents a difference between two positions. Add it to a position
@@ -502,11 +506,40 @@ export class Position extends vscode.Position {
     );
   }
 
+  private alignToChineseWord(position: Position, inclusive: Boolean): Position {
+    const range = new vscode.Range(new vscode.Position(this.line, this.character), position);
+    const text = TextEditor.getText(range);
+    const words = segment.doSegment(text);
+    if (words.length > 0) {
+      if (
+        this.line < position.line ||
+        (this.line === position.line && this.character <= position.character)
+      ) {
+        position = new Position(
+          range.start.line,
+          range.start.character + words[0].w.length - (inclusive ? 1 : 0)
+        );
+      } else if (
+        this.line > position.line ||
+        (this.line === position.line && this.character >= position.character)
+      ) {
+        position = new Position(
+          range.end.line,
+          range.end.character - words[words.length - 1].w.length + (inclusive ? 1 : 0)
+        );
+      }
+    }
+    return position;
+  }
+
   /**
    * Inclusive is true if we consider the current position a valid result, false otherwise.
    */
   public getWordLeft(inclusive: boolean = false): Position {
-    return this.getWordLeftWithRegex(this._nonWordCharRegex, inclusive);
+    return this.alignToChineseWord(
+      this.getWordLeftWithRegex(this._nonWordCharRegex, inclusive),
+      false
+    );
   }
 
   public getBigWordLeft(inclusive: boolean = false): Position {
@@ -521,7 +554,10 @@ export class Position extends vscode.Position {
    * Inclusive is true if we consider the current position a valid result, false otherwise.
    */
   public getWordRight(inclusive: boolean = false): Position {
-    return this.getWordRightWithRegex(this._nonWordCharRegex, inclusive);
+    return this.alignToChineseWord(
+      this.getWordRightWithRegex(this._nonWordCharRegex, inclusive),
+      false
+    );
   }
 
   public getBigWordRight(inclusive: boolean = false): Position {
@@ -544,7 +580,10 @@ export class Position extends vscode.Position {
    * Inclusive is true if we consider the current position a valid result, false otherwise.
    */
   public getCurrentWordEnd(inclusive: boolean = false): Position {
-    return this.getCurrentWordEndWithRegex(this._nonWordCharRegex, inclusive);
+    return this.alignToChineseWord(
+      this.getCurrentWordEndWithRegex(this._nonWordCharRegex, inclusive),
+      true
+    );
   }
 
   /**

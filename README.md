@@ -1,12 +1,12 @@
 <h2 align="center"><img src="https://raw.githubusercontent.com/VSCodeVim/Vim/master/images/icon.png" height="128"><br>VSCodeVim</h2>
-<p align="center"><strong>Vim emulation for Visual Studio Code</strong></p>
+<p align="center"><strong>Vim emulation for Visual Studio Code for Chinese users -- A unofficial fork</strong></p>
 
 [![http://aka.ms/vscodevim](https://vsmarketplacebadge.apphb.com/version/vscodevim.vim.svg)](http://aka.ms/vscodevim)
 [![](https://vsmarketplacebadge.apphb.com/installs-short/vscodevim.vim.svg)](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim)
 [![https://travis-ci.org/VSCodeVim/Vim](https://travis-ci.org/VSCodeVim/Vim.svg?branch=master)](https://travis-ci.org/VSCodeVim/Vim)
 [![https://vscodevim-slackin.azurewebsites.net](https://img.shields.io/badge/vscodevim-slack-blue.svg?logo=slack)](https://vscodevim-slackin.azurewebsites.net)
 
-VSCodeVim is a Vim emulator for [Visual Studio Code](https://code.visualstudio.com/).
+VSCodeVimChinese is a Vim emulator for [Visual Studio Code](https://code.visualstudio.com/) with support for Chinese words. Will rebase on upstream regularly.
 
 - 🚚 For a full list of supported Vim features, please refer to our [roadmap](ROADMAP.md).
 - 📃 Our [change log](CHANGELOG.md) outlines the breaking/major/minor updates between releases.
